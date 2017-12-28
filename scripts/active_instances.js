@@ -3,12 +3,22 @@ define(["window"], (window)=>{
     return function active_instances() {
 
         var algorithms = [];
+        var active_algoritms = [];
 
         this.proceed = () => { 
-            return false;
+            var new_active = [];
+            for(var i = 0 ; i < active_algoritms.length ; i++) {
+                var algorithm = active_algoritms[i];
+                if(algorithm.proceed()) {
+                    new_active.push(algorithm);
+                }
+            }
+            active_algoritms = new_active;
+            return active_algoritms.length != 0;
         }
         this.add_algorithm = (algorithm) => {
             algorithms.push(algorithm);
+            active_algoritms.push(algorithm);
         }
         this.render = () => {
 
