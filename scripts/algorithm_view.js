@@ -42,10 +42,19 @@ define(["d3"], (d3)=>{
                                 .style("display", "block")
                                 .style("text-align", "center");
 
+        var on_skip_next_cb_ = null;
+
         var play_button_ = new_button(view_ctl_, "play_arrow");
         var stop_button_ = new_button(view_ctl_, "stop")
         var pause_button_ = new_button(view_ctl_, "pause");
+
         var next_button_ = new_button(view_ctl_, "skip_next");
+
+        next_button_.on("click", ()=>{ on_skip_next_cb_(); })
+
+        this.on_skip_next = (cb) => {
+            on_skip_next_cb_ = cb;
+        }
 
         this.render = () => {
             
