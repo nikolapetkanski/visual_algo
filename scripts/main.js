@@ -18,7 +18,6 @@ require(["active_instances", "algorithms"], (active_instances, algorithms)=>{
     //     inst.render_all();
     // }
     
-    inst.render_all();
     // animate();
 
 })

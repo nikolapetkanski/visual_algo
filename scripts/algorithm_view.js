@@ -43,10 +43,18 @@ define(["d3"], (d3)=>{
                                 .style("text-align", "center");
 
         var on_skip_next_cb_ = null;
+        var on_play_cb_ = null;
+        var on_stop_cb_ = null;
 
         var play_button_ = new_button(view_ctl_, "play_arrow");
+
+        play_button_.on("click", ()=>{ on_play_cb_() })
+
         var stop_button_ = new_button(view_ctl_, "stop")
-        var pause_button_ = new_button(view_ctl_, "pause");
+
+        stop_button_.attr("disabled", "true");
+
+        stop_button_.on("click", ()=> { on_stop_cb_(); })
 
         var next_button_ = new_button(view_ctl_, "skip_next");
 
@@ -54,6 +62,41 @@ define(["d3"], (d3)=>{
 
         this.on_skip_next = (cb) => {
             on_skip_next_cb_ = cb;
+        }
+
+        this.on_play = (cb) => {
+            on_play_cb_ = cb;
+        }
+
+        this.on_stop = (cb) => {
+            on_stop_cb_ = cb;
+        }
+
+        var play_active_ = false; // TODO: replace with states
+
+        this.play_active = () => { return play_active_; }
+        
+        this.set_play_active = (value) => { 
+            if(play_active_ != value) {
+                if(play_active_) {
+                    play_button_.attr("disabled", null);
+                    stop_button_.attr("disabled", "true");
+                    next_button_.attr("disabled", null);
+                } else {
+                    play_button_.attr("disabled", "true");
+                    stop_button_.attr("disabled", null);
+                    next_button_.attr("disabled", "true");
+                }
+                play_active_ = value;
+            } else {
+                throw "illegal state";
+            }
+        }
+
+        this.on_finished = () => {
+            play_button_.attr("disabled", "true");
+            stop_button_.attr("disabled", "true");
+            next_button_.attr("disabled", "true");
         }
 
         this.render = () => {

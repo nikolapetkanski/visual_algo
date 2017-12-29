@@ -23,8 +23,13 @@ define(["window", "algorithm_view"], (window, algorithm_view)=>{
             if(algorithm = active_algoritms[id]) {
                 if(!algorithm.proceed()) {
                     delete active_algoritms[id];
+                } else {
+                    return true;
                 }
+            } else {
+                throw "illegal state";
             }
+            return false;
         }
         this.add_algorithm = (algorithm) => {
 
@@ -37,9 +42,38 @@ define(["window", "algorithm_view"], (window, algorithm_view)=>{
             active_algoritms[id] = algorithm;
 
             view.on_skip_next(()=>{
-                self.proceed(id);
+                var proceed = self.proceed(id);
                 self.render(id);
+                if(!proceed) {
+                    view.on_finished();
+                }
             });
+
+            view.on_play(()=>{
+
+                view.set_play_active(true);
+
+                function play() {
+                    if(view.play_active()) {
+                        var proceed = self.proceed(id);
+                        self.render(id);
+                        if(proceed) {
+                            setTimeout(play, 250);
+                        } else {
+                            view.set_play_active(false);
+                            view.on_finished();
+                        }
+                    }
+                }
+
+                play();
+            });
+
+            view.on_stop(()=>{
+                view.set_play_active(false);
+            });
+
+            self.render(id);
 
         }
         this.render_all = () => {
