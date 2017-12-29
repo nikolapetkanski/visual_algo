@@ -15,10 +15,10 @@ require(["active_instances", "algorithms"], (active_instances, algorithms)=>{
         if(inst.proceed()) {
           setTimeout(animate, 500);
         }
-        inst.render();
+        inst.render_all();
     }
     
-    inst.render();
+    inst.render_all();
     animate();
 
 })

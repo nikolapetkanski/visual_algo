@@ -69,7 +69,7 @@ define([], ()=>{
         })();
 
 
-        this.svg_id = () => { return "insertion_sort"; }
+        this.id = () => { return "insertion_sort"; }
         
         this.svg_width = () => { return svg_width_; }
 
@@ -108,8 +108,6 @@ define([], ()=>{
                 j = j+1;
             }
 
-            console.log(operations);
-
             return operations;
 
         })();
@@ -128,16 +126,13 @@ define([], ()=>{
 
                 switch(oper.type) {
                     case "element_start":
-                        console.log("element_start");
                         svg_elements_[oper.args.element_index].set_color("rgb(255,0,0)");
                         exit = true;
                         break;
                     case "element_end":
-                        console.log("element_end");
                         svg_elements_[oper.args.element_index].set_color("rgb(0,0,0)");
                         break;
                     case "swap_elements":
-                        console.log("swap_elements");
                         
                         var element_idx = oper.args.element_index;
                         var element_i = svg_elements_[element_idx-1];
@@ -152,7 +147,6 @@ define([], ()=>{
                         element_i1.set_y(tmp_y);
                         break;
                     case "decr_element_index":
-                        console.log("decr_element_index");
                         var element_idx = oper.args.element_index;
                         var element_i = svg_elements_[element_idx];
                         var element_i1 = svg_elements_[element_idx+1];
