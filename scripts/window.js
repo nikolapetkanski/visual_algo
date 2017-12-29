@@ -15,7 +15,7 @@ define(["d3"], (d3)=>{
                     .append("div")
                     .attr("id", id);
 
-            return inst;
+            return inst.append("div");
         },
     };
 })
