@@ -41,38 +41,6 @@ define(["window", "algorithm_view"], (window, algorithm_view)=>{
 
             active_algoritms[id] = algorithm;
 
-            view.on_skip_next(()=>{
-                var proceed = self.proceed(id);
-                self.render(id);
-                if(!proceed) {
-                    view.on_finished();
-                }
-            });
-
-            view.on_play(()=>{
-
-                view.set_play_active(true);
-
-                function play() {
-                    if(view.play_active()) {
-                        var proceed = self.proceed(id);
-                        self.render(id);
-                        if(proceed) {
-                            setTimeout(play, 250);
-                        } else {
-                            view.set_play_active(false);
-                            view.on_finished();
-                        }
-                    }
-                }
-
-                play();
-            });
-
-            view.on_stop(()=>{
-                view.set_play_active(false);
-            });
-
             self.render(id);
 
         }
