@@ -80,6 +80,16 @@ define(["d3"], (d3)=>{
         var step_over_ = new_button(buttons_div_, 'forward');
         var continue_ = new_button(buttons_div_, 'play_arrow');
 
+        var step_over_cb_ = null;
+
+        this.on_step_over = (cb) => {
+            step_over_cb_ = cb;
+        }
+
+        step_over_.on('click', ()=>{
+            step_over_cb_();
+        })
+
         var code_div_ = control_div_.append("div")
                             .attr("class", "code-div")
                             .style("display", "block")
@@ -111,6 +121,8 @@ define(["d3"], (d3)=>{
 
             var code = algorithm_.code();
 
+            code_svg_.selectAll("*").remove();
+
             var code_font = "monospace";
             var code_font_size = 15;
             var g = code_svg_.append("g");
@@ -121,16 +133,20 @@ define(["d3"], (d3)=>{
 
             for(var line in code.text) {
                 
+                var color = "rgb(0,0,0)";
+                if(code.line == line) {
+                    color = "rgb(255,0,0)";
+                }
+
                 var line = g.append("text")
                                 .attr("font-family", code_font)
                                 .attr("font-size", code_font_size)
                                 .attr("y", y)
                                 .attr("x", code_font_size)
+                                .attr("fill", color)
                                 .text(code.text[line].lineno + 
                                       repeat(' ', (1+code.text[line].indent)*4) + 
                                       code.text[line].text);
-
-                
 
                 y += line_height;
                 height += line_height;

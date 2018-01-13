@@ -21,6 +21,18 @@ define([], ()=>{
         this.color = () => { return color_; }
         this.set_color = (c) => { color_ = c; }
 
+        var self = this;
+
+        this.swap_height = (other) => {
+            var tmp = other.y();
+            other.set_y(self.y());
+            self.set_y(tmp);
+
+            tmp = other.height();
+            other.set_height(self.height());
+            self.set_height(tmp);
+        }
+
     }
 
     function insertion_sort(elements) { 
@@ -57,15 +69,7 @@ define([], ()=>{
             var svg_elements = [];
 
             var n = elements_initial_.length;
-            // beware floating point roundings
-            // TODO: try working with 2^-n + ... + 2^0 + ... + 2^n
-            //       or draw up to a scale and then use svg.transform
             var p = svg_width_/128;
-            // (w - p*n + p) * 1 / n =
-            // w/n - p*n / n + p/n = 
-            // w/n - p + p/n =
-            // w/n + p/n - p =
-            // (w+p)/n - p 
             var w = (svg_width_ + p) / n - p;
             var h = svg_heigth_/max_;
 
@@ -89,54 +93,97 @@ define([], ()=>{
             update_elements();
         }
 
+        var code_ = {
+            text : {
+                "set_j" : { lineno: 1, indent: 0, text: "for j in [1 .. N-1]" },
+                "set_i" : { lineno: 2, indent: 1, text: "i = j-1" },
+                "cmp" : { lineno: 3, indent: 1, text: "while i>=0 && A[i]>A[i+1]" },
+                "swap" : { lineno: 4, indent: 2, text: "swap(A[i],A[i+1])" },
+                "dec_i" : { lineno: 5, indent: 2, text: "i = i-1" }
+            },
+            line : "set_j"
+        };
+
+        this.code = () => { return code_; }
+
         var operations_ = (() => {
             
             var operations = [];
 
             var j = 1; // TODO: ensure that elements.length > 0
 
-            while(j < elements.length) {
+            operations.push({
+                name: "set_j",
+                arg: {
+                    val : j
+                }
+            });
 
-                operations.push({ type: "element_start", args: { element_index: j } });
+            while(j < elements.length) {
 
                 var i = j-1;
 
+                operations.push({ 
+                    name : "set_i",
+                    arg: {
+                        val : i
+                    }
+                });
+
                 while(true) {
 
+                    operations.push({
+                        name: "cmp",
+                        arg: {
+                            smallest: i < 0,
+                            greater: elements[i] < elements[i+1]
+                        }
+                    });
+
                     if(i < 0 || elements[i] < elements[i+1])  {
-                        operations.push({ type: "element_end", args: { element_index: i+1 }});
                         break;
                     }
 
                     var tmp = elements[i+1];
                     elements[i+1] = elements[i];
                     elements[i] = tmp;
-                    operations.push({ type: "swap_elements", args: { element_index: i+1 }});
 
-                    operations.push({ type: "decr_element_index", args: { element_index: i }});
+                    operations.push({
+                        name: "swap",
+                        arg: {
+                            e1: i,
+                            e2: i+1
+                        }
+                    });
+
+                    operations.push({ 
+                        name: "dec_i",
+                        arg: {
+                            val: i
+                        }
+                    });
                     i = i-1;
                     
                 }
 
                 j = j+1;
+                operations.push({
+                    name: "set_j",
+                    arg: {
+                        val : j
+                    }
+                });
             }
 
             return operations;
 
         })();
 
-        var code_ = {
-            current_line: "set_i",
-            text : {
-                "set_i" : { lineno: 1, indent: 0, text: "for i in [1 .. N-1]" },
-                "set_j" : { lineno: 2, indent: 1, text: "j = i-1" },
-                "insert" : { lineno: 3, indent: 1, text: "while j>=0 && A[j]>A[j+1]" },
-                "swap" : { lineno: 4, indent: 2, text: "swap(A[j],A[j+1])" },
-                "dec_j" : { lineno: 5, indent: 2, text: "j = j-1" }
+        function default_color(elements) {
+            for(var i = 0 ; i < elements.length ; i++) {
+                elements[i].set_color("rgb(0,0,0)");
             }
-        };
-
-        this.code = () => { return code_; }
+        }
 
         this.proceed = () => {
 
@@ -154,44 +201,38 @@ define([], ()=>{
 
                 var oper = operations_.shift();
 
-                switch(oper.type) {
-                    case "element_start":
-                        svg_elements_[oper.args.element_index].set_color("rgb(255,0,0)");
-                        exit = true;
+                switch(oper.name) {
+                    case "set_j" :
+                        default_color(svg_elements_);
+                        svg_elements_[oper.arg.val].set_color("rgb(255,0,0)");
                         break;
-                    case "element_end":
-                        svg_elements_[oper.args.element_index].set_color("rgb(0,0,0)");
+                    case "set_i" :
+                        svg_elements_[oper.arg.val].set_color("rgb(0,0,255)");
                         break;
-                    case "swap_elements":
-                        
-                        var element_idx = oper.args.element_index;
-                        var element_i = svg_elements_[element_idx-1];
-                        var element_i1 = svg_elements_[element_idx];
-                        
-                        var tmp_height = element_i.height();
-                        element_i.set_height(element_i1.height());
-                        element_i1.set_height(tmp_height);
-                        
-                        var tmp_y = element_i.y();
-                        element_i.set_y(element_i1.y());
-                        element_i1.set_y(tmp_y);
+                    case "cmp" :
+                        break; // TODO: represent comparison
+                    case "swap" :
+                        {   var e1 = oper.arg.e1;
+                            var e2 = oper.arg.e2;
+                            svg_elements_[e1].swap_height(svg_elements_[e2]);
+                            svg_elements_[e1].set_color("rgb(255,0,0)");
+                            svg_elements_[e2].set_color("rgb(0,0,0)");
+                        }
                         break;
-                    case "decr_element_index":
-                        var element_idx = oper.args.element_index;
-                        var element_i = svg_elements_[element_idx];
-                        var element_i1 = svg_elements_[element_idx+1];
-                        element_i.set_color("rgb(255,0,0)");
-                        element_i1.set_color("rgb(0,0,0)");
-                        exit = true;
+                    case "dec_i" :
+                        if(oper.arg.val > 0) {
+                            svg_elements_[oper.arg.val-1].set_color("rgb(0,0,255)")
+                        }
                         break;
-                    
+
                 }
-                if(exit) {
-                    break;
-                }
+                code_.line = oper.name;
+                console.log(code_.line);
+                break;
             }
 
             if(operations_.length <= 0) {
+                default_color(svg_elements_);
                 return false;
             }
             return true;

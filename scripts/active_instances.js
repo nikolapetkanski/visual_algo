@@ -37,6 +37,11 @@ define(["window", "algorithm_view"], (window, algorithm_view)=>{
 
             var view = new algorithm_view(window.add_instance(id), algorithm, self);
 
+            view.on_step_over(()=>{
+                self.proceed(id);
+                self.render(id);
+            })
+
             algorithm_views[id] = view;
 
             active_algoritms[id] = algorithm;
