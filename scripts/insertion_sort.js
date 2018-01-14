@@ -58,7 +58,7 @@ define([], ()=>{
 
         var max_ = (()=>{
             var max = elements[0];
-            for(var i = 0 ; i < max ; i++)
+            for(var i = 0 ; i < elements.length ; i++)
                 if(max < elements[i])
                     max =  elements[i];
             return max;
@@ -101,7 +101,7 @@ define([], ()=>{
                 "swap" : { lineno: 4, indent: 2, text: "swap(A[i],A[i+1])" },
                 "dec_i" : { lineno: 5, indent: 2, text: "i = i-1" }
             },
-            line : "set_j"
+            line : undefined
         };
 
         this.code = () => { return code_; }
@@ -227,7 +227,6 @@ define([], ()=>{
 
                 }
                 code_.line = oper.name;
-                console.log(code_.line);
                 break;
             }
 

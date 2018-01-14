@@ -7,7 +7,6 @@ define(["d3"], (d3)=>{
             .style("padding", "0%")
             .style("margin", "0%")
             .style("margin-right", "2px")
-            .style("float", "right")
             .text(text);
         return button;
     }
@@ -77,8 +76,9 @@ define(["d3"], (d3)=>{
                                     .style("width", "100%")
                                     .style("height", "25%");
 
-        var step_over_ = new_button(buttons_div_, 'forward');
         var continue_ = new_button(buttons_div_, 'play_arrow');
+
+        var step_over_ = new_button(buttons_div_, 'forward');
 
         var step_over_cb_ = null;
 
@@ -96,7 +96,7 @@ define(["d3"], (d3)=>{
                             .style("margin", "0%")
                             .style("padding", "0%")
                             .style("width", "100%")
-                            .style("height", "75%")
+                            .style("height", "80%")
                             .style("overflow", "auto");
 
         var code_svg_ = code_div_.append("svg")
@@ -107,16 +107,6 @@ define(["d3"], (d3)=>{
 
         var code_svg_size_ = svg_size(code_svg_);
 
-        // var play_button_ = new_button(view_ctl_, "play_arrow");
-        // play_button_.on("click", ()=>{ on_play_cb_() })
-
-        // var stop_button_ = new_button(view_ctl_, "stop")
-        // stop_button_.attr("disabled", "true");
-        // stop_button_.on("click", ()=> { on_stop_cb_(); })
-
-        // var next_button_ = new_button(view_ctl_, "skip_next");
-        // next_button_.on("click", ()=>{ on_skip_next_cb_(); })
-
         function render_code() {
 
             var code = algorithm_.code();
@@ -125,42 +115,54 @@ define(["d3"], (d3)=>{
 
             var code_font = "monospace";
             var code_font_size = 15;
-            var g = code_svg_.append("g");
             var y = code_font_size;
-            var width = 0;
+            var width = code_svg_size_.width;
             var height = 0;
-            var line_height = code_font_size*1.4
+            var line_height = code_font_size*1.4;
 
-            for(var line in code.text) {
-                
-                var color = "rgb(0,0,0)";
-                if(code.line == line) {
-                    color = "rgb(255,0,0)";
+            for(var k in code.text) {
+
+                var color = "rgb(255,255,255)";
+                if(code.line == k) {
+                    color = "rgb(255,127,127)";
                 }
 
-                var line = g.append("text")
-                                .attr("font-family", code_font)
-                                .attr("font-size", code_font_size)
-                                .attr("y", y)
-                                .attr("x", code_font_size)
-                                .attr("fill", color)
-                                .text(code.text[line].lineno + 
-                                      repeat(' ', (1+code.text[line].indent)*4) + 
-                                      code.text[line].text);
+                var g = code_svg_.append("g");
+
+                var rect = g.append("rect")
+                        .attr("x", 0)
+                        .attr("y", height)
+                        .attr("width", code_svg_size_.width)
+                        .attr("height", line_height)
+                        .attr("fill", color);
+
+                var indent = code.text[k].indent*code_font_size;
+                var text = g.append("text")
+                            .attr("font-family", code_font)
+                            .attr("font-size", code_font_size)
+                            .attr("y", y)
+                            .attr("x", indent)
+                            .text(code.text[k].text);
 
                 y += line_height;
                 height += line_height;
 
-                var line_width = line.node().getComputedTextLength();
+                var line_width = indent + text.node().getComputedTextLength();
+
                 if(line_width > width)
                     width = line_width;
             }
-            
+
             if(height > code_svg_size_.height) {
+                code_svg_size_.height = height;
                 code_svg_.attr("height", height+"px");
             }
+            
             if(width > code_svg_size_.width) {
+                code_svg_size_.width = width;
                 code_svg_.attr("width", width+"px");
+                code_svg_.select("rect")
+                        .attr("width", width+"px");
             }
 
         };
