@@ -115,7 +115,8 @@ define([], ()=>{
             operations.push({
                 name: "set_j",
                 arg: {
-                    val : j
+                    val : j,
+                    last : j >= elements.length
                 }
             });
 
@@ -170,7 +171,8 @@ define([], ()=>{
                 operations.push({
                     name: "set_j",
                     arg: {
-                        val : j
+                        val : j,
+                        last : j >= elements.length
                     }
                 });
             }
@@ -191,49 +193,43 @@ define([], ()=>{
                 throw "illegal state";
             }
 
-            while(true) {
-
-                if(operations_.length <= 0) {
-                    break;
-                }
-
-                var exit = false;
-
-                var oper = operations_.shift();
-
-                switch(oper.name) {
-                    case "set_j" :
-                        default_color(svg_elements_);
-                        svg_elements_[oper.arg.val].set_color("rgb(255,0,0)");
-                        break;
-                    case "set_i" :
-                        svg_elements_[oper.arg.val].set_color("rgb(0,0,255)");
-                        break;
-                    case "cmp" :
-                        break; // TODO: represent comparison
-                    case "swap" :
-                        {   var e1 = oper.arg.e1;
-                            var e2 = oper.arg.e2;
-                            svg_elements_[e1].swap_height(svg_elements_[e2]);
-                            svg_elements_[e1].set_color("rgb(255,0,0)");
-                            svg_elements_[e2].set_color("rgb(0,0,0)");
-                        }
-                        break;
-                    case "dec_i" :
-                        if(oper.arg.val > 0) {
-                            svg_elements_[oper.arg.val-1].set_color("rgb(0,0,255)")
-                        }
-                        break;
-
-                }
-                code_.line = oper.name;
-                break;
-            }
-
-            if(operations_.length <= 0) {
-                default_color(svg_elements_);
+            if(operations_.length == 0) {
+                code_.line = undefined;
                 return false;
             }
+
+            var oper = operations_.shift();
+
+            switch(oper.name) {
+                case "set_j" :
+                    default_color(svg_elements_);
+                    if(!oper.arg.last) {
+                        svg_elements_[oper.arg.val].set_color("rgb(255,0,0)");
+                    }
+                    break;
+                case "set_i" :
+                    svg_elements_[oper.arg.val].set_color("rgb(0,0,255)");
+                    break;
+                case "cmp" :
+                    break; // TODO: represent comparison
+                case "swap" :
+                    {   var e1 = oper.arg.e1;
+                        var e2 = oper.arg.e2;
+                        svg_elements_[e1].swap_height(svg_elements_[e2]);
+                        svg_elements_[e1].set_color("rgb(255,0,0)");
+                        svg_elements_[e2].set_color("rgb(0,0,0)");
+                    }
+                    break;
+                case "dec_i" :
+                    if(oper.arg.val > 0) {
+                        svg_elements_[oper.arg.val-1].set_color("rgb(0,0,255)")
+                    }
+                    break;
+
+            }
+
+            code_.line = oper.name;
+
             return true;
         }
 

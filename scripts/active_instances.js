@@ -38,9 +38,21 @@ define(["window", "algorithm_view"], (window, algorithm_view)=>{
             var view = new algorithm_view(window.add_instance(id), algorithm, self);
 
             view.on_step_over(()=>{
-                self.proceed(id);
+                if(!self.proceed(id)) {
+                    view.ready();
+                }
                 self.render(id);
-            })
+            });
+            view.on_continue(()=>{
+                (function play() {
+                    if(self.proceed(id)) {
+                        setTimeout(play, 250);
+                    } else {
+                        view.ready();
+                    }
+                    self.render(id);
+                })();
+            });
 
             algorithm_views[id] = view;
 

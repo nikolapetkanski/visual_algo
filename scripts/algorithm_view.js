@@ -42,14 +42,6 @@ define(["d3"], (d3)=>{
                                 .attr("height", "100%")
                                 .style("display", "block");
 
-
-        // var view_ctl_ = view_div_.append("div")
-        //                         .attr("class", "view-ctl")
-        //                         .style("display", "block")
-        //                         .style("width", "100%")
-        //                         .style("height", "20%")
-        //                         .style("text-align", "center");
-
         function svg_size(svg) {
             var bb = svg.node().getBoundingClientRect();
             return { width: bb.width, height: bb.height };
@@ -80,6 +72,9 @@ define(["d3"], (d3)=>{
 
         var step_over_ = new_button(buttons_div_, 'forward');
 
+        var replay_ = new_button(buttons_div_, 'replay')
+                            .attr("disabled", "true");
+
         var step_over_cb_ = null;
 
         this.on_step_over = (cb) => {
@@ -88,7 +83,27 @@ define(["d3"], (d3)=>{
 
         step_over_.on('click', ()=>{
             step_over_cb_();
-        })
+        });
+
+        var continue_cb_ = null;
+
+        this.on_continue = (cb) => {
+            continue_cb_ = cb;
+        }
+
+        function disbale_buttons() {
+            continue_.attr("disabled", "true");
+            step_over_.attr("disabled", "true");
+        }
+
+        continue_.on("click", ()=>{
+            disbale_buttons();
+            continue_cb_();
+        });
+
+        this.ready = ()=> {
+            disbale_buttons();
+        }
 
         var code_div_ = control_div_.append("div")
                             .attr("class", "code-div")
@@ -136,7 +151,7 @@ define(["d3"], (d3)=>{
                         .attr("height", line_height)
                         .attr("fill", color);
 
-                var indent = code.text[k].indent*code_font_size;
+                var indent = 2*code.text[k].indent*code_font_size;
                 var text = g.append("text")
                             .attr("font-family", code_font)
                             .attr("font-size", code_font_size)
@@ -170,13 +185,7 @@ define(["d3"], (d3)=>{
         function render_elements() {
             view_svg_.selectAll("*").remove();
 
-            // var a = 0.95;
-            // var b = 0.95; 
-            // var e = (svg_width_ - (svg_width_*a))/2
-            // var f = svg_height_ - (svg_height_*b);
-
-            var g = view_svg_.append("g")
-                        // .attr("transform", "scale("+a+","+b+") translate("+e+","+f+")");
+            var g = view_svg_.append("g");
 
             var elements = algorithm_.svg_elements();
 
