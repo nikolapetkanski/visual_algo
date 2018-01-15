@@ -95,7 +95,7 @@ define([], ()=>{
 
         var code_ = {
             text : {
-                "set_j" : { lineno: 1, indent: 0, text: "for j in [1 .. N-1]" },
+                "set_j" : { lineno: 1, indent: 0, text: "for j in [1 .. A.length-1]" },
                 "set_i" : { lineno: 2, indent: 1, text: "i = j-1" },
                 "cmp" : { lineno: 3, indent: 1, text: "while i>=0 && A[i]>A[i+1]" },
                 "swap" : { lineno: 4, indent: 2, text: "swap(A[i],A[i+1])" },
@@ -134,11 +134,7 @@ define([], ()=>{
                 while(true) {
 
                     operations.push({
-                        name: "cmp",
-                        arg: {
-                            smallest: i < 0,
-                            greater: elements[i] < elements[i+1]
-                        }
+                        name: "cmp"
                     });
 
                     if(i < 0 || elements[i] < elements[i+1])  {

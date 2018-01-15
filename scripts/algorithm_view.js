@@ -24,6 +24,55 @@ define(["d3"], (d3)=>{
         var algorithm_ = algorithm;
         var instances_ = instances;
 
+        var states_ = {
+            init:1, 
+            after_step_over:2,
+            playing:3,
+            stopped:4
+        };
+
+        var current_state_ = states_.init;
+
+        this.step_over = () => {
+            switch(current_state_) {
+                case states_.init:
+                case states_.after_step_over:
+                    enable_replay_button();
+                    current_state_ = states_.after_step_over;
+                    break;
+                default: break;
+            }
+        }
+
+        this.play = () => {
+            switch(current_state_) {
+                case states_.init:
+                case states_.after_step_over:
+                    disbale_buttons();
+                    current_state_ = states_.playing;
+                    break;
+                default: break;
+            }
+        }
+
+        this.play_end = () => {
+            switch(current_state_) {
+                case states_.playing:
+                    enable_replay_button();
+                    break;
+                default: break;
+            }
+        }
+
+        this.step_over_end = () => {
+            switch(current_state_) {
+                case states_.after_step_over:
+                    disbale_play_and_step();
+                    break;
+                default: break;
+            }
+        }
+
         var div_ = div.style("height", "100%")
                         .style("width", "65%")
                         .style("margin", "0 auto");
@@ -75,6 +124,30 @@ define(["d3"], (d3)=>{
         var replay_ = new_button(buttons_div_, 'replay')
                             .attr("disabled", "true");
 
+        function disbale_play_and_step() {
+            continue_.attr("disabled", "true");
+            step_over_.attr("disabled", "true");
+        }
+
+        function disbale_buttons() {
+            disbale_play_and_step();
+            replay_.attr("disabled", "true");
+        }
+
+        function enable_replay_button() {
+            replay_.attr("disabled", null);
+        }
+
+        var continue_cb_ = null;
+
+        this.on_continue = (cb) => {
+            continue_cb_ = cb;
+        }
+
+        continue_.on("click", ()=>{
+            continue_cb_();
+        });
+
         var step_over_cb_ = null;
 
         this.on_step_over = (cb) => {
@@ -85,25 +158,15 @@ define(["d3"], (d3)=>{
             step_over_cb_();
         });
 
-        var continue_cb_ = null;
+        var replay_cb_ = null;
 
-        this.on_continue = (cb) => {
-            continue_cb_ = cb;
+        this.on_replay = (cb) => {
+            replay_cb_ = cb;
         }
 
-        function disbale_buttons() {
-            continue_.attr("disabled", "true");
-            step_over_.attr("disabled", "true");
-        }
-
-        continue_.on("click", ()=>{
-            disbale_buttons();
-            continue_cb_();
+        replay_.on("click", ()=> {
+            replay_cb_();
         });
-
-        this.ready = ()=> {
-            disbale_buttons();
-        }
 
         var code_div_ = control_div_.append("div")
                             .attr("class", "code-div")
@@ -122,6 +185,7 @@ define(["d3"], (d3)=>{
 
         var code_svg_size_ = svg_size(code_svg_);
 
+        // TODO: avoid redrawing everything 
         function render_code() {
 
             var code = algorithm_.code();
