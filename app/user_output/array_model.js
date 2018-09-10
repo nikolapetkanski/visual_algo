@@ -23,20 +23,19 @@ function(x, element_model)
             n_ = n;
             max_ = max;
 
-            var sx = width_/n_;
-            var sy = height_/max_;
+            var element_width = width_/n_;
 
-            array_svg_.attr("transform", "translate("+cx_+", "+cy_+") scale("+sx+", "+sy+")");
+            array_svg_.attr("transform", "translate("+cx_+", "+cy_+")");
 
             for(var i = 0 ; i < n ; i++)
             {
                 elements_.push(
                     new element_model(
                         array_svg_, 
-                        i, 
-                        0, 
-                        1, 
+                        i,
                         max_, 
+                        element_width,
+                        height_,
                         id+"_element_"+i));
             }
         }

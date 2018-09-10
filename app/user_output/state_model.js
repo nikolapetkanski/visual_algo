@@ -56,7 +56,6 @@ function(x, array_model, element_model)
                 arrays_.push(array);
                 cy = cy - height;
             }
-
         }
 
         this.show = function()
