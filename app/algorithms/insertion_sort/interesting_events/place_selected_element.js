@@ -13,18 +13,19 @@ function(x, interesting_event){
         {
             
             var array = model_interface_.get_array(1);
-
             var cpos = array.get_element(this.pos_);
 
             array = model_interface_.get_array(0);
-
             var npos = array.get_element(this.pos_);
 
             npos.set_value(cpos.get_value());
-            // npos.set_color("rgb(255,0,0)");
-
             cpos.set_value(null);
-            // cpos.set_color("rgb(0,0,0)");
+
+            if(this.pos_ > 0) 
+            {
+                var spos = array.get_element(this.pos_ - 1);
+                spos.set_color("rgb(0,0,0)");
+            }
 
         }
 

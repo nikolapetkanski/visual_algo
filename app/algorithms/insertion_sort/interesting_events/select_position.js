@@ -11,9 +11,15 @@ function(x, interesting_event){
 
         this.apply = function(model_interface_)
         {
-            var element = model_interface_
-                            .get_array(0)
-                            .get_element(this.pos_);
+
+            if(this.pos_ >= 0)
+            {
+                var e = model_interface_
+                        .get_array(0)
+                        .get_element(this.pos_);
+
+                e.set_color("rgb(0,0,255)");
+            }
 
         }
 

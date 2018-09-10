@@ -17,7 +17,9 @@ function(x, interesting_event){
             var npos = array.get_element(this.pos_+1);
 
             npos.set_value(cpos.get_value());
+
             cpos.set_value(null);
+            cpos.set_color("rgb(0,0,0)");
 
             array = model_interface_.get_array(1);
 

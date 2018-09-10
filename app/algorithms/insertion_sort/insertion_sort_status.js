@@ -83,7 +83,7 @@ function(
                     this.ie_(new inner_loop_check(4, i >= 0, i)); // Execute line 4 from source text
                 }
 
-                this.ie_(new place_selected_element(7, i+1));
+                this.ie_(new place_selected_element(7, i + 1));
                 A[i + 1] = key;
 
                 this.ie_(new null_event(1));// Execute line 1 from source text
