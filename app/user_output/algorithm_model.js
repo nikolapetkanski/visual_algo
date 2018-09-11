@@ -1,12 +1,12 @@
 define([
-    "user_output/state_model", 
+    "user_output/algorithm_model", 
     // "user_output/sequence_model",
     "user_output/array_model",
     "user_output/element_model"], 
 function(x, array_model, element_model)
 {
 
-    function state_model()
+    function algorithm_model()
     {
         var d3_ = null;
 
@@ -79,6 +79,6 @@ function(x, array_model, element_model)
 
     }
 
-    return state_model;
+    return algorithm_model;
 
 })
