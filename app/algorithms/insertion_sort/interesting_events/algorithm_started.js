@@ -19,7 +19,7 @@ define([
                 e.set_value(this.data_[i]);
             }
 
-            arr = model_interface_.get_array(1);
+            arr.get_element(0).set_color("rgb(0,255,0)")
 
         }
 

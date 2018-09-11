@@ -17,6 +17,7 @@ function(x, interesting_event){
             var npos = array.get_element(this.pos_+1);
 
             npos.set_value(cpos.get_value());
+            npos.set_color("rgb(0,255,0)");
 
             cpos.set_value(null);
             cpos.set_color("rgb(0,0,0)");

@@ -19,12 +19,14 @@ function(x, interesting_event){
             var npos = array.get_element(this.pos_);
 
             npos.set_value(cpos.get_value());
+            npos.set_color("rgb(0,255,0)");
+
             cpos.set_value(null);
 
             if(this.pos_ > 0) 
             {
                 var spos = array.get_element(this.pos_ - 1);
-                spos.set_color("rgb(0,0,0)");
+                spos.set_color("rgb(0,255,0)");
             }
 
         }
