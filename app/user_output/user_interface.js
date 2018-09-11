@@ -91,7 +91,8 @@ function(user_interface, graphical_model){
                 .attr("id", "model_view")
                 .attr("class", "algorithm_view_component")
                 .style("display", "inline-block")
-                .style("height", "70%");
+                .style("height", "70%")
+                .style("width", "100%");
 
             var source_view = main_view
                 .append("div")
