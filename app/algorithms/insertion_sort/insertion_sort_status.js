@@ -3,7 +3,6 @@ define([
     "base/algorithm_status_base",
     "base/ie/algorithm_complete",
     "algorithms/insertion_sort/interesting_events/algorithm_started",
-    "algorithms/insertion_sort/interesting_events/inner_loop_check",
     "algorithms/insertion_sort/interesting_events/move_to_right",
     "base/ie/null_event",
     "algorithms/insertion_sort/interesting_events/place_selected_element",
@@ -14,7 +13,6 @@ function(
     algorithm_status_base, 
     algorithm_complete,
     algorithm_started,
-    inner_loop_check,
     move_to_right,
     null_event,
     place_selected_element,
@@ -67,20 +65,20 @@ function(
                 this.ie_(new select_element(2, j)); // Execute line 2 from source text
                 var key = A[j];
 
-                this.ie_(new select_position(3, j - 1)); // Execute line 3 from source text
+                this.ie_(new select_position(3, j - 1, true)); // Execute line 3 from source text
                 var i = j - 1;
 
-                this.ie_(new inner_loop_check(4, i >= 0, i)); // Execute line 4 from source text
+                this.ie_(new select_position(4, i, false)); // Execute line 4 from source text
                 while(i >= 0 && A[i] > key)
                 {
 
                     this.ie_(new move_to_right(5, i)); // Execute line 5 from source text
                     A[i + 1] = A[i];
 
-                    this.ie_(new select_position(6, i - 1)); // Execute line 6 from source text
+                    this.ie_(new select_position(6, i - 1, true)); // Execute line 6 from source text
                     i = i - 1;
 
-                    this.ie_(new inner_loop_check(4, i >= 0, i)); // Execute line 4 from source text
+                    this.ie_(new select_position(4, i, false)); // Execute line 4 from source text
                 }
 
                 this.ie_(new place_selected_element(7, i + 1));

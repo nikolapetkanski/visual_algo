@@ -23,12 +23,6 @@ function(x, interesting_event){
 
             cpos.set_value(null);
 
-            if(this.pos_ > 0) 
-            {
-                var spos = array.get_element(this.pos_ - 1);
-                spos.set_color("rgb(0,255,0)");
-            }
-
         }
 
     }
