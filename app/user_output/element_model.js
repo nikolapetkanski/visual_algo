@@ -14,17 +14,17 @@ function(x)
 
         var element_svg_ = svg_.append("g")
                                .attr("id", id_)
-                               .attr("transform", "translate("+(pos_*width_)+", "+cy_+")");
+                               .attr("transform", "translate("+(pos_*width_+1)+", "+cy_+")");
 
         var rect_ = element_svg_.append("rect")
                                 .attr("id", id+"_rect")
-                                .attr("width", width_)
+                                .attr("width", width_-2)
                                 .attr("fill", "rgb(0,0,0)");
 
         var text_ = element_svg_.append("text")
                                 .attr("font-family", "monospace")
                                 .attr("font-size", width_ / 2)
-                                .attr("x", 0)
+                                .attr("x", 1)
                                 .attr("y", height_)
                                 .attr("fill", "rgb(128,128,128)");
 
