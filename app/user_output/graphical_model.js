@@ -2,7 +2,7 @@ define([
     "user_output/graphical_model",
     "user_output/algorithm_model",
     "user_output/algorithm_source"], 
-function(graphical_model, state_model, algorithm_source){
+function(graphical_model, algorithm_model, algorithm_source){
 
     function graphical_model(d3, parent)
     {
