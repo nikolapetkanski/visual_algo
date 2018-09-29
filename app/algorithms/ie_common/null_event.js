@@ -1,4 +1,7 @@
-define(["base/ie/null_event", "base/ie/interesting_event"], function(x, interesting_event){
+define([
+    "algorithms/ie_common/null_event", 
+    "base/ie/interesting_event"], 
+function(x, interesting_event){
 
     function null_event(line)
     {

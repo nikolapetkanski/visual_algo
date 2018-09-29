@@ -1,4 +1,7 @@
-define(["base/ie/return_pivot", "base/ie/interesting_event"], function(x, interesting_event){
+define([
+    "algorithms/quick_sort/interesting_events/return_pivot", 
+    "base/ie/interesting_event"], 
+function(x, interesting_event){
 
     function return_pivot(line, p, pos, r)
     {
@@ -10,10 +13,15 @@ define(["base/ie/return_pivot", "base/ie/interesting_event"], function(x, intere
 
         this.apply = function(model_interface_)
         {
+            var arr = model_interface_.get_array(0);
+
             for(var i = this.p_ ; i <= this.r_ ; i++)
             {
                 if(i != this.pos_)
-                    model_interface_.set_selected(0, i);
+                {
+                    var e = arr.get_element(i);
+                    e.set_color("rgb(0,0,0)");
+                }
             }
             
         }

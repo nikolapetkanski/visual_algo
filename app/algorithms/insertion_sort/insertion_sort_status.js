@@ -1,18 +1,18 @@
 define([
     "algorithms/insertion_sort/insertion_sort_status",
     "base/algorithm_status_base",
-    "base/ie/algorithm_complete",
-    "algorithms/insertion_sort/interesting_events/algorithm_started",
+    "algorithms/ie_common/algorithm_complete",
+    "algorithms/insertion_sort/interesting_events/insertion_sort_started",
     "algorithms/insertion_sort/interesting_events/move_to_right",
-    "base/ie/null_event",
+    "algorithms/ie_common/null_event",
     "algorithms/insertion_sort/interesting_events/place_selected_element",
-    "algorithms/insertion_sort/interesting_events/select_element",
+    "algorithms/ie_common/select_element",
     "algorithms/insertion_sort/interesting_events/select_position"],
 function(
     insertion_sort_status, 
     algorithm_status_base, 
     algorithm_complete,
-    algorithm_started,
+    insertion_sort_started,
     move_to_right,
     null_event,
     place_selected_element,
@@ -49,7 +49,7 @@ function(
 
         this.initialize = function()
         {
-            this.ie_(new algorithm_started(this.get_data().slice()));
+            this.ie_(new insertion_sort_started(this.get_data().slice()));
             this.insertion_sort_();
             this.ie_(new algorithm_complete());
         }

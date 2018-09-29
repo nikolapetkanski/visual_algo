@@ -1,7 +1,7 @@
 define([
     "algorithms/algorithm_status_select",
     "algorithms/insertion_sort/insertion_sort_status",
-    "algorithms/quick_sort_status"], 
+    "algorithms/quick_sort/quick_sort_status"], 
 function(algorithm_status_select, insertion_sort_status, quick_sort_status)
 {
 

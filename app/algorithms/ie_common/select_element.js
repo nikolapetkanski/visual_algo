@@ -1,5 +1,5 @@
 define([
-    "algorithms/insertion_sort/interesting_events/select_element", 
+    "algorithms/ie_common/select_element", 
     "base/ie/interesting_event"], 
 function(x, interesting_event){
 

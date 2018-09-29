@@ -1,4 +1,7 @@
-define(["base/ie/extend_right_partition", "base/ie/interesting_event"], function(x, interesting_event){
+define([
+    "algorithms/quick_sort/interesting_events/extend_right_partition", 
+    "base/ie/interesting_event"], 
+function(x, interesting_event){
 
     function extend_right_partition(line, start, end)
     {

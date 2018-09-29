@@ -1,24 +1,22 @@
 define([
-    "algorithms/quick_sort_status",
+    "algorithms/quick_sort/quick_sort_status",
     "base/algorithm_status_base",
-    "base/ie/algorithm_complete",
-    // "base/ie/algorithm_started",
-    "base/ie/extend_left_partition",
-    "base/ie/extend_right_partition",
-    "base/ie/null_event",
-    // "base/ie/select_element",
-    "base/ie/swap_elements",
-    "base/ie/place_pivot",
-    "base/ie/return_pivot"],
+    "algorithms/ie_common/algorithm_complete",
+    "algorithms/ie_common/algorithm_started",
+    "algorithms/quick_sort/interesting_events/extend_partition",
+    "algorithms/ie_common/null_event",
+    "algorithms/ie_common/select_element",
+    "algorithms/ie_common/swap_elements",
+    "algorithms/quick_sort/interesting_events/place_pivot",
+    "algorithms/quick_sort/interesting_events/return_pivot"],
 function(
     quick_sort_status, 
     algorithm_status_base, 
     algorithm_complete,
-    // algorithm_started,
-    extend_left_partition,
-    extend_right_partition,
+    algorithm_started,
+    extend_partition,
     null_event,
-    // select_element,
+    select_element,
     swap_elements,
     place_pivot,
     return_pivot){
@@ -36,10 +34,20 @@ function(
 
         this.get_model_definition = function()
         {
-            return [
-                {type:"ELEMENT"},
-                {type:"ARRAY"}
-            ];
+            var data = this.get_data();
+            var max = data[0];
+
+            for(var i = 1; i < data.length ; i++)
+            {
+                if(data[i] > max)
+                    max = data[i];
+            }
+
+            return {
+                array_count: 2,
+                data_length: this.get_data().length,
+                max_element: max
+            };
         }
 
         this.initialize = function()
@@ -84,14 +92,14 @@ function(
                 this.ie_(new null_event(10)); // Execute line 10 from source text
                 if(A[j] <= x)
                 {
-                    this.ie_(new extend_left_partition(11, p, i+1)); // Execute line 11 from source text
+                    this.ie_(new extend_partition(11, p, i+1)); // Execute line 11 from source text
                     i = i + 1;
 
                     this.ie_(new swap_elements(12, i, j)); // Execute line 12 from source text
                     this.swap_(A, i, j);
                 }
 
-                this.ie_(new extend_right_partition(9, i+1, j)); // Execute line 9 from source text
+                this.ie_(new extend_partition(9, i+1, j)); // Execute line 9 from source text
             }
 
             this.ie_(new place_pivot(13, r, i+1)); // Execute line 13 from source text

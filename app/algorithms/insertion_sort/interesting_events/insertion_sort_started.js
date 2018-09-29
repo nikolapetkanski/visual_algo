@@ -1,10 +1,10 @@
 define([
-    'algorithms/insertion_sort/interesting_events/algorithm_started',
+    'algorithms/insertion_sort/interesting_events/insertion_sort_started',
     'base/ie/interesting_event'
-], function(algorithm_started, interesting_event) 
+], function(insertion_sort_started, interesting_event) 
 {
 
-    function algorithm_started(data)
+    function insertion_sort_started(data)
     {
         this.set_line(0);
         this.data_ = data;
@@ -25,7 +25,7 @@ define([
 
     }
 
-    algorithm_started.prototype = new interesting_event();
+    insertion_sort_started.prototype = new interesting_event();
 
-    return algorithm_started;
+    return insertion_sort_started;
 });

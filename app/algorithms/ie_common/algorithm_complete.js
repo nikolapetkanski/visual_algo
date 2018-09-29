@@ -1,4 +1,7 @@
-define(["base/ie/algorithm_complete", "base/ie/interesting_event"], function(x, interesting_event){
+define([
+    "algorithms/ie_common/algorithm_complete", 
+    "base/ie/interesting_event"], 
+function(x, interesting_event){
 
     function algorithm_complete()
     {
