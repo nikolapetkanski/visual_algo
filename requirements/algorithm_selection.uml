@@ -1,0 +1,47 @@
+@startuml
+
+participant User order 0
+participant App order 10
+participant AlgorithmRegistry order 20
+participant Algorithm order 30
+
+App -> AlgorithmRegistry : enumerateAlgorithms()
+activate App
+activate AlgorithmRegistry
+AlgorithmRegistry --> App : AlgorithmList
+deactivate App
+deactivate AlgorithmRegistry
+
+User -> App : algorithm selected
+activate User
+    activate App
+        App -> AlgorithmRegistry : getAlgorithm()
+
+        activate AlgorithmRegistry
+            AlgorithmRegistry --> App : Algorithm 
+        deactivate AlgorithmRegistry
+
+        App -> Algorithm : getDefaultSequence()
+
+        activate Algorithm
+            Algorithm --> App : defaultSequence
+        deactivate Algorithm
+
+        App --> User
+    deactivate App
+deactivate User
+
+User -> App : input selected
+activate User
+    activate App
+        App -> Algorithm : initializeSequence()
+
+        activate Algorithm
+            Algorithm --> App
+        deactivate Algorithm
+        
+        App --> User
+    deactivate App
+deactivate User
+
+@enduml

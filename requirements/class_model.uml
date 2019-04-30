@@ -1,0 +1,31 @@
+@startuml
+
+AnimationControl : - state
+AnimationControl : + step()
+AnimationControl : + start()
+AnimationControl : + stop()
+AnimationControl : + restart()
+AnimationControl *.r. Algorithm
+
+Animation : + visualizeElements()
+Animation : + visualizePseudoCode()
+Animation : + visualizeDescription()
+Animation : + exit()
+
+AlgorithmRegistry : + getAlgorithm()
+AlgorithmRegistry : + registerAlgorithm()
+AlgorithmRegistry : + enumerateAlgorithms()
+AlgorithmRegistry "1" *.. "*" Algorithm
+
+Algorithm : + executeStep()
+Algorithm : + hasMoreSteps()
+Algorithm : + initializeSequence()
+Algorithm : + getDefaultSequence()
+Algorithm : - type
+Algorithm : - defaultSequence
+Algorithm : - sequence
+Algorithm : - pseudoCode
+Algorithm : - description
+Algorithm *.r. Animation
+
+@enduml

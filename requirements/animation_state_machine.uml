@@ -1,0 +1,15 @@
+@startuml
+
+[*] --> stopped : initializeSequence()
+
+stopped --> stopped : step() \nrestart()
+stopped -l-> finished : hasMoreSteps() = false
+stopped --> started : start()
+
+started --> finished : hasMoreSteps() = false
+started --> stopped : stop()
+started --> started : restart()
+
+finished -r-> stopped : restart()
+
+@enduml
